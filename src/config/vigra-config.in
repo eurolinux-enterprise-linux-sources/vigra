@@ -1,0 +1,96 @@
+#!/bin/sh
+# @configure_input@
+
+prefix="@prefix@"
+exec_prefix="@exec_prefix@"
+
+usage()
+{
+  if test -z '@FFTW_LIB@'; then
+    fftwstatus=" (not configured)"
+    fftwflags=" (fftw not configured)"
+  else
+    fftwflags=" and fftw"
+  fi
+
+  cat <<EOF
+Usage: $0 [OPTIONS]
+Options:
+    [--version]      output version ("@MAJOR_VERSION@.@MINOR_VERSION@.@MICRO_VERSION@")
+    [--target]       output platform this VIGRA library was configured for
+    [--impex-lib]    output flags for linking libvigraimpex
+    [--fftw-lib]     output flags for linking libfftw$fftwstatus
+    [--rfftw-lib]    output flags for linking librfftw and libfftw$fftwstatus
+    [--cppflags]     output include flags for vigra$fftwflags
+    [--include-path] output path to VIGRA includes
+    [--docdir]       output path to VIGRA documentation
+   ([--libs]         synonym for --impex-lib)
+EOF
+    exit $1
+}
+
+echopath()
+{
+    echo "$1" \
+    | sed "s,\$[({]exec_prefix[})],@exec_prefix@," \
+    | sed "s,\$[({]prefix[})],@prefix@,"
+}
+
+if test $# -eq 0; then
+    echo "ERROR: no parameters given!" 1>&2
+    usage 1 1>&2
+fi
+
+try=false
+
+while test $# -gt 0; do
+  case $1 in
+    --version)
+      echo @MAJOR_VERSION@.@MINOR_VERSION@.@MICRO_VERSION@
+      ;;
+    --target|--platform)
+      echo @target@
+      ;;
+    --cppflags|--cxxincludes|--cxxflags|--cincludes|--cflags)
+      echopath '@POSTINSTALLCPPFLAGS@'
+      ;;
+    --impex_lib|--impex-lib|--libs)
+      echopath '@IMPEX_LIB@'
+      ;;
+    --fftw_lib|--fftw-lib)
+      if test -z '@FFTW_LIB@'; then
+        echo "VIGRA was configured without fftw switches, libpath unknown!" 1>&2
+      else
+        echopath '@FFTW_LIB@'
+      fi
+      ;;
+    --rfftw_lib|--rfftw-lib)
+      if test -z '@RFFTW_LIB@'; then
+        echo "VIGRA was configured without fftw switches, libpath unknown!" 1>&2
+      else
+        echopath '@RFFTW_LIB@'
+      fi
+      ;;
+    --include_path|--include-path|--includepath)
+      echopath '@VIGRA_INCPATH@'
+      ;;
+    --docdir)
+      echopath '@docdir@'
+      ;;
+    --help|-h|-?)
+      usage 0 1>&2
+      ;;
+    --try)
+      try=true
+      ;;
+    *)
+      if $try; then
+        exit 2
+      else
+        echo "ERROR: unknown parameter '$1'!"
+        usage 2 1>&2
+      fi
+      ;;
+  esac
+  shift
+done

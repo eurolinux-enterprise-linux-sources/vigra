@@ -1,0 +1,20 @@
+include ../config/Makefile.include
+
+all:: impex
+
+install:: 
+	@cd impex ; $(MAKE) install ; cd ..
+
+impex::
+	@cd impex ; $(MAKE) all ; cd ..
+
+examples::
+	@cd examples ; $(MAKE) CXX=$(CXX) all ; cd ..
+
+clean::
+	@cd impex ; $(MAKE) clean ; cd ..
+	@cd examples ; $(MAKE) clean ; cd ..
+
+distclean::
+	@cd impex ; $(MAKE) distclean ; cd ..
+	@cd examples ; $(MAKE) distclean ; cd ..
