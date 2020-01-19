@@ -2,7 +2,7 @@
 Summary:        Generic Programming for Computer Vision
 Name:           vigra
 Version:        1.9.0
-Release:        9%{?dist}
+Release:        11%{?dist}
 License:        MIT
 Group:          Development/Libraries
 Source0:        http://hci.iwr.uni-heidelberg.de/%{name}/%{name}-%{version}-src.tar.gz
@@ -102,6 +102,12 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.9.0-11
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.9.0-10
+- Mass rebuild 2013-12-27
+
 * Thu Aug 29 2013 Caolán McNamara <caolanm@redhat.com> - 1.9.0-9
 - Resolves: rhbz#884207 multi-lib vigra-config
 
